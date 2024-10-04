@@ -4,8 +4,9 @@ import br.com.gabrielalmir.gotcha.dto.ShortenUrlRequest;
 import br.com.gabrielalmir.gotcha.dto.ShortenUrlResponse;
 import br.com.gabrielalmir.gotcha.entity.UrlEntity;
 import br.com.gabrielalmir.gotcha.repository.UrlRepository;
+import br.com.gabrielalmir.gotcha.utils.Base62Converter;
+import br.com.gabrielalmir.gotcha.utils.Snowflake;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,11 +20,7 @@ public class UrlService {
     }
 
     public ShortenUrlResponse shortenUrl(ShortenUrlRequest request, HttpServletRequest servletRequest) {
-        String id;
-
-        do {
-            id = RandomStringUtils.randomAlphanumeric(5, 10);
-        } while (urlRepository.existsById(id));
+        var id = Base62Converter.toBase62(new Snowflake(1, 1).nextId());
 
         var entity = new UrlEntity(id, request.url(), LocalDateTime.now().plusMinutes(1));
         urlRepository.save(entity);
