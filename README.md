@@ -23,7 +23,7 @@
 - **Exemplo de Resposta**:
   ```json
   {
-    "shortenedUrl": "https://gotcha.com/abc123"
+    "shortenedUrl": "http://localhost/abc123"
   }
   ```
 
@@ -32,7 +32,7 @@
 - **Método**: `GET`
 - **Descrição**: Redireciona para a URL original baseada no ID encurtado.
 - **Exemplo**:
-  - Acessando `https://gotcha.com/abc123` redirecionará para `https://exemplo.com`.
+  - Acessando `http://localhost/abc123` redirecionará para `https://exemplo.com`.
 
 ## Requisitos
 
