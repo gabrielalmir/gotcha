@@ -2,19 +2,14 @@ package br.com.gabrielalmir.gotcha.controller;
 
 import br.com.gabrielalmir.gotcha.dto.ShortenUrlRequest;
 import br.com.gabrielalmir.gotcha.dto.ShortenUrlResponse;
-import br.com.gabrielalmir.gotcha.entity.UrlEntity;
-import br.com.gabrielalmir.gotcha.repository.UrlRepository;
 import br.com.gabrielalmir.gotcha.service.UrlService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 
 @RestController
 public class UrlController {
