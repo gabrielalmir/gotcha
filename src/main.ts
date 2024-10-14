@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from "express";
 import { env } from "./config/env";
 import { Database } from "./db";
@@ -11,6 +12,7 @@ async function main() {
     const port = env.PORT;
 
     app.use(express.json());
+    app.use(cors());
     app.use('/', urlRoutes);
 
     app.listen(port, () => {
