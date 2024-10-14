@@ -1,0 +1,8 @@
+### Criar URL
+
+POST http://localhost:3000/shorten-url
+Content-Type: application/json
+
+{
+  "url": "https://github.com/gabrielalmir"
+}
