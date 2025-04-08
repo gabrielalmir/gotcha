@@ -1,11 +1,12 @@
 # Gotcha - URL Shortener
 
-**Gotcha** é um projeto desenvolvido em **Node.js** com **Express** que oferece um serviço de encurtamento de URLs. Ele utiliza **MongoDB** como banco de dados para armazenar as URLs encurtadas e oferece uma API simples para encurtar e redirecionar URLs.
+**Gotcha** é um projeto desenvolvido em **Go** que oferece um serviço de encurtamento de URLs. Ele utiliza **MongoDB** como banco de dados para armazenar as URLs encurtadas e oferece uma API simples para encurtar e redirecionar URLs.
 
 ## Funcionalidades
 
 1. **Encurtar URL**: Recebe uma URL completa e retorna uma versão encurtada.
 2. **Redirecionar URL**: Redireciona para a URL completa original quando acessada por meio do ID encurtado.
+3. **IDs Únicos**: Utiliza o algoritmo Snowflake para gerar IDs únicos e distribuídos.
 
 ## Endpoints
 
@@ -22,22 +23,24 @@
 - **Exemplo de Resposta**:
   ```json
   {
-    "shortenedUrl": "http://localhost:3000/abc123"
+    "original": "https://exemplo.com",
+    "short": "2bX7Pk",
+    "created_at": "2024-04-08T21:30:00Z"
   }
   ```
 
 ### 2. Redirecionar URL
-- **Endpoint**: `/{id}`
+- **Endpoint**: `/{short}`
 - **Método**: `GET`
 - **Descrição**: Redireciona para a URL original baseada no ID encurtado.
 - **Exemplo**:
-  - Acessando `http://localhost:3000/abc123` redirecionará para `https://exemplo.com`.
+  - Acessando `http://localhost:3000/2bX7Pk` redirecionará para `https://exemplo.com`.
 
 ## Requisitos
 
-- **Node.js 14+**
-- **Express**
+- **Go 1.21+**
 - **MongoDB**
+- **Docker** (opcional)
 
 ## Como rodar o projeto
 
@@ -53,18 +56,23 @@
 
 3. Instale as dependências:
    ```bash
-   npm install
+   go mod download
    ```
 
-4. Configure o acesso ao MongoDB:
-   - Atualize o arquivo `src/database.ts` com a string de conexão correta para o seu MongoDB.
-   ```typescript
-   const database = new Database('mongodb://localhost:27017/mydatabase'); // Ajuste para o seu ambiente
-   ```
-
-5. Inicie o servidor:
+4. Configure o MongoDB:
+   - Use o Docker Compose fornecido ou configure seu próprio MongoDB
    ```bash
-   npm start
+   docker-compose up -d
+   ```
+
+5. Configure as variáveis de ambiente:
+   ```bash
+   cp .env.example .env
+   ```
+
+6. Inicie o servidor:
+   ```bash
+   go run src/main.go
    ```
 
    O servidor será iniciado em `http://localhost:3000`.
@@ -72,14 +80,22 @@
 ## Estrutura do Projeto
 
 - **Controller**: A camada que expõe os endpoints REST.
-  - `UrlController`: Gerencia as operações de encurtar e redirecionar URLs.
+  - `URLController`: Gerencia as operações de encurtar e redirecionar URLs.
 
 - **Service**: Lógica de negócios para manipulação de URLs.
-  - `UrlService`: Implementa o encurtamento e recuperação de URLs.
+  - `URLService`: Implementa o encurtamento e recuperação de URLs.
 
 - **Model**: Definição da entidade URL no MongoDB.
-  - `UrlEntity`: Representa a URL encurtada e sua data de expiração no banco de dados.
+  - `URL`: Representa a URL encurtada no banco de dados.
 
 - **Utilitários**:
-  - `Snowflake`: Gerador de IDs únicos baseado no algoritmo Snowflake.
-  - `Base62Converter`: Converte o ID único gerado para uma string Base62 usada nas URLs encurtadas.
+  - `Snowflake`: Gerador de IDs únicos baseado no algoritmo Snowflake do Twitter.
+  - `Base62`: Converte IDs Snowflake para strings curtas e legíveis.
+
+## Tecnologias Utilizadas
+
+- **Go**: Linguagem de programação
+- **Gin**: Framework web
+- **MongoDB**: Banco de dados
+- **Docker**: Containerização (opcional)
+- **Snowflake**: Algoritmo para geração de IDs únicos
