@@ -29,6 +29,10 @@ func NewURLService(database *db.Database) (*URLService, error) {
 }
 
 func (s *URLService) CreateShortURL(ctx context.Context, originalURL string) (*models.URL, error) {
+	if !utils.IsValidURL(originalURL) {
+		return nil, utils.ErrInvalidURL
+	}
+
 	id := s.snowflake.Generate()
 	shortURL := utils.ToBase62(id)
 
